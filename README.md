@@ -10,9 +10,64 @@ MemCache is a simple in-memory cache implementation written in Go. It provides b
 - **Eviction Policies**: Supports eviction policies to manage cache size when reaching capacity.
 - **Concurrency-Safe**: Designed to support concurrent read and write operations safely.
 
-## Installation
+## Creating a Cache Instance
 
-To use MemCache in your Go project, simply import it as a package:
+To create a new MemCache instance, use the `NewCache` function along with optional configuration options:
 
 ```go
-import "your/module/path/memcache"
+cache := NewCache(WithTTL(10*time.Second), WithEvictionPolicy("Oldest"))
+```
+
+## Setting Values
+
+Insert key-value pairs into the cache using the `Set` method:
+
+```go
+err := cache.Set("bucket", "key", []byte("value"))
+if err != nil {
+    // Handle error
+}
+```
+
+## Retrieving Values
+
+To retrieve a value from the cache, use the `Get` method:
+
+```go
+value, err := cache.Get("bucket", "key")
+if err != nil {
+    // Handle error
+}
+```
+
+## Deleting Values
+
+Delete an entry from the cache using the `Delete` method:
+
+```go
+err := cache.Delete("bucket", "key")
+if err != nil {
+    // Handle error
+}
+```
+
+
+## Configuration Options
+
+MemCache supports configuration options such as TTL and eviction policy. You can apply these options during cache creation or update them later:
+
+```go
+// Apply options during cache creation
+cache := NewCache(WithTTL(10*time.Second), WithEvictionPolicy("Oldest"))
+
+// Update options later
+cache.ApplyOptions(WithTTL(20*time.Second))
+```
+
+##### Available Eviction Policy: Determines how Memcached handles cache capacity limitations. The `WithEvictionPolicy` option accepts a string argument specifying the desired policy:
+
+- "Oldest" (default): Evicts the oldest item.
+
+
+
+
